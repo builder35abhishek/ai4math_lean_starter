@@ -51,7 +51,7 @@ jobs:
       - name: Check Mathlib import smoke test
         run: |
           printf '%s\n' \
-            'import Mathlib' \
+            'import Mathlib.Tactic' \
             '' \
             'theorem mathlib_smoke_nat_add_comm (a b : Nat) : a + b = b + a := by' \
             '  simpa using Nat.add_comm a b' \
@@ -95,7 +95,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main
           git add reports/
           if git diff --cached --quiet; then
             echo "No Mathlib report changes to commit."
