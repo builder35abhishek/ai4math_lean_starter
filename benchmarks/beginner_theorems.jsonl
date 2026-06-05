@@ -1,20 +1,20 @@
-{"id":"true_intro","domain":"logic","informal":"True is true.","candidates":["theorem true_intro : True := by\n  trivial\n"]}
-{"id":"and_left","domain":"logic","informal":"From P and Q, prove P.","candidates":["theorem and_left (P Q : Prop) : P ∧ Q -> P := by\n  intro h\n  exact h.left\n"]}
-{"id":"and_right","domain":"logic","informal":"From P and Q, prove Q.","candidates":["theorem and_right (P Q : Prop) : P ∧ Q -> Q := by\n  intro h\n  exact h.right\n"]}
-{"id":"or_left_intro","domain":"logic","informal":"From P, prove P or Q.","candidates":["theorem or_left_intro (P Q : Prop) : P -> P ∨ Q := by\n  intro hp\n  exact Or.inl hp\n"]}
-{"id":"or_right_intro","domain":"logic","informal":"From Q, prove P or Q.","candidates":["theorem or_right_intro (P Q : Prop) : Q -> P ∨ Q := by\n  intro hq\n  exact Or.inr hq\n"]}
-{"id":"imp_refl","domain":"logic","informal":"Every proposition implies itself.","candidates":["theorem imp_refl_toy (P : Prop) : P -> P := by\n  intro hp\n  exact hp\n"]}
-{"id":"modus_ponens","domain":"logic","informal":"If P implies Q and P holds, then Q holds.","candidates":["theorem modus_ponens_toy (P Q : Prop) : (P -> Q) -> P -> Q := by\n  intro hpq hp\n  exact hpq hp\n"]}
-{"id":"false_elim","domain":"logic","informal":"False implies any proposition.","candidates":["theorem false_elim_toy (P : Prop) : False -> P := by\n  intro h\n  exact False.elim h\n"]}
-{"id":"exists_intro_nat","domain":"logic","informal":"There exists a natural number.","candidates":["theorem exists_intro_nat : ∃ n : Nat, n = 0 := by\n  exact Exists.intro 0 rfl\n"]}
-{"id":"eq_refl_nat","domain":"nat_arithmetic","informal":"Every natural number equals itself.","candidates":["theorem eq_refl_nat (n : Nat) : n = n := by\n  rfl\n"]}
-{"id":"nat_add_zero_2","domain":"nat_arithmetic","informal":"n + 0 = n.","candidates":["theorem nat_add_zero_2 (n : Nat) : n + 0 = n := by\n  simp\n"]}
-{"id":"nat_zero_add_2","domain":"nat_arithmetic","informal":"0 + n = n.","candidates":["theorem nat_zero_add_2 (n : Nat) : 0 + n = n := by\n  simp\n"]}
-{"id":"nat_mul_zero","domain":"nat_arithmetic","informal":"n times zero is zero.","candidates":["theorem nat_mul_zero_toy (n : Nat) : n * 0 = 0 := by\n  simp\n"]}
-{"id":"nat_zero_mul","domain":"nat_arithmetic","informal":"zero times n is zero.","candidates":["theorem nat_zero_mul_toy (n : Nat) : 0 * n = 0 := by\n  simp\n"]}
-{"id":"nat_one_mul","domain":"nat_arithmetic","informal":"one times n is n.","candidates":["theorem nat_one_mul_toy (n : Nat) : 1 * n = n := by\n  simp\n"]}
-{"id":"nat_mul_one","domain":"nat_arithmetic","informal":"n times one is n.","candidates":["theorem nat_mul_one_toy (n : Nat) : n * 1 = n := by\n  simp\n"]}
-{"id":"nat_add_comm","domain":"nat_arithmetic","informal":"Addition of natural numbers is commutative.","candidates":["theorem nat_add_comm_toy (a b : Nat) : a + b = b + a := by\n  exact Nat.add_comm a b\n"]}
-{"id":"nat_add_assoc","domain":"nat_arithmetic","informal":"Addition of natural numbers is associative.","candidates":["theorem nat_add_assoc_toy (a b c : Nat) : (a + b) + c = a + (b + c) := by\n  exact Nat.add_assoc a b c\n"]}
-{"id":"nat_mul_comm","domain":"nat_arithmetic","informal":"Multiplication of natural numbers is commutative.","candidates":["theorem nat_mul_comm_toy (a b : Nat) : a * b = b * a := by\n  exact Nat.mul_comm a b\n"]}
-{"id":"nat_mul_assoc","domain":"nat_arithmetic","informal":"Multiplication of natural numbers is associative.","candidates":["theorem nat_mul_assoc_toy (a b c : Nat) : (a * b) * c = a * (b * c) := by\n  exact Nat.mul_assoc a b c\n"]}
+{"id":"true_intro","domain":"logic","informal":"True is true.","statement":"theorem true_intro : True := by","candidates":["trivial"]}
+{"id":"and_left","domain":"logic","informal":"From P and Q, prove P.","statement":"theorem and_left (P Q : Prop) : P ∧ Q -> P := by","candidates":["intro h\nexact h.left"]}
+{"id":"and_right","domain":"logic","informal":"From P and Q, prove Q.","statement":"theorem and_right (P Q : Prop) : P ∧ Q -> Q := by","candidates":["intro h\nexact h.right"]}
+{"id":"or_left_intro","domain":"logic","informal":"From P, prove P or Q.","statement":"theorem or_left_intro (P Q : Prop) : P -> P ∨ Q := by","candidates":["intro hp\nexact Or.inl hp"]}
+{"id":"or_right_intro","domain":"logic","informal":"From Q, prove P or Q.","statement":"theorem or_right_intro (P Q : Prop) : Q -> P ∨ Q := by","candidates":["intro hq\nexact Or.inr hq"]}
+{"id":"imp_refl","domain":"logic","informal":"Every proposition implies itself.","statement":"theorem imp_refl_toy (P : Prop) : P -> P := by","candidates":["intro hp\nexact hp"]}
+{"id":"modus_ponens","domain":"logic","informal":"If P implies Q and P holds, then Q holds.","statement":"theorem modus_ponens_toy (P Q : Prop) : (P -> Q) -> P -> Q := by","candidates":["intro hpq hp\nexact hpq hp"]}
+{"id":"false_elim","domain":"logic","informal":"False implies any proposition.","statement":"theorem false_elim_toy (P : Prop) : False -> P := by","candidates":["intro h\nexact False.elim h"]}
+{"id":"exists_intro_nat","domain":"logic","informal":"There exists a natural number.","statement":"theorem exists_intro_nat : ∃ n : Nat, n = 0 := by","candidates":["exact Exists.intro 0 rfl"]}
+{"id":"eq_refl_nat","domain":"nat_arithmetic","informal":"Every natural number equals itself.","statement":"theorem eq_refl_nat (n : Nat) : n = n := by","candidates":["rfl"]}
+{"id":"nat_add_zero_2","domain":"nat_arithmetic","informal":"n + 0 = n.","statement":"theorem nat_add_zero_2 (n : Nat) : n + 0 = n := by","candidates":["simp"]}
+{"id":"nat_zero_add_2","domain":"nat_arithmetic","informal":"0 + n = n.","statement":"theorem nat_zero_add_2 (n : Nat) : 0 + n = n := by","candidates":["simp"]}
+{"id":"nat_mul_zero","domain":"nat_arithmetic","informal":"n times zero is zero.","statement":"theorem nat_mul_zero_toy (n : Nat) : n * 0 = 0 := by","candidates":["simp"]}
+{"id":"nat_zero_mul","domain":"nat_arithmetic","informal":"zero times n is zero.","statement":"theorem nat_zero_mul_toy (n : Nat) : 0 * n = 0 := by","candidates":["simp"]}
+{"id":"nat_one_mul","domain":"nat_arithmetic","informal":"one times n is n.","statement":"theorem nat_one_mul_toy (n : Nat) : 1 * n = n := by","candidates":["simp"]}
+{"id":"nat_mul_one","domain":"nat_arithmetic","informal":"n times one is n.","statement":"theorem nat_mul_one_toy (n : Nat) : n * 1 = n := by","candidates":["simp"]}
+{"id":"nat_add_comm","domain":"nat_arithmetic","informal":"Addition of natural numbers is commutative.","statement":"theorem nat_add_comm_toy (a b : Nat) : a + b = b + a := by","candidates":["exact Nat.add_comm a b"]}
+{"id":"nat_add_assoc","domain":"nat_arithmetic","informal":"Addition of natural numbers is associative.","statement":"theorem nat_add_assoc_toy (a b c : Nat) : (a + b) + c = a + (b + c) := by","candidates":["exact Nat.add_assoc a b c"]}
+{"id":"nat_mul_comm","domain":"nat_arithmetic","informal":"Multiplication of natural numbers is commutative.","statement":"theorem nat_mul_comm_toy (a b : Nat) : a * b = b * a := by","candidates":["exact Nat.mul_comm a b"]}
+{"id":"nat_mul_assoc","domain":"nat_arithmetic","informal":"Multiplication of natural numbers is associative.","statement":"theorem nat_mul_assoc_toy (a b c : Nat) : (a * b) * c = a * (b * c) := by","candidates":["exact Nat.mul_assoc a b c"]}
