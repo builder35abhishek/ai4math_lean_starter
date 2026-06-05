@@ -1,21 +1,27 @@
 # Mathlib Proof Agent Metrics
 
-- Total theorems: 25
-- Solved: 25
-- Unsolved: 0
-- Solve rate: 100.0%
-- Average attempts per theorem: 1.04
+- Total theorems: 49
+- Solved: 45
+- Unsolved: 4
+- Solve rate: 91.8%
+- Average attempts per theorem: 1.67
 
 ## First successful source
 
-- heuristic: 25
+- heuristic: 45
+- unsolved: 4
 
 ## Domain breakdown
 
-- algebra: heuristic=10
+- algebra: heuristic=12
 - inequality: heuristic=5
+- int_arithmetic: heuristic=4, unsolved=2
+- list: heuristic=6
 - logic: heuristic=5
+- nat_arithmetic: heuristic=4, unsolved=2
 - number_theory: heuristic=5
+- option: heuristic=2
+- product: heuristic=2
 
 ## Theorem details
 
@@ -46,3 +52,27 @@
 | mathlib_logic_or_intro_left | logic | True | heuristic | 1 |
 | mathlib_logic_or_intro_right | logic | True | heuristic | 1 |
 | mathlib_exists_self_eq_nat | logic | True | heuristic | 2 |
+| mathlib_nat_add_right_cancel | algebra | True | heuristic | 1 |
+| mathlib_nat_add_left_cancel | algebra | True | heuristic | 1 |
+| mathlib_nat_succ_ne_zero | nat_arithmetic | True | heuristic | 1 |
+| mathlib_nat_zero_ne_succ | nat_arithmetic | True | heuristic | 1 |
+| mathlib_nat_succ_injective | nat_arithmetic | True | heuristic | 1 |
+| mathlib_nat_pred_succ | nat_arithmetic | True | heuristic | 1 |
+| mathlib_nat_add_succ | nat_arithmetic | False | unsolved | 9 |
+| mathlib_nat_succ_add | nat_arithmetic | False | unsolved | 9 |
+| mathlib_int_add_comm | int_arithmetic | False | unsolved | 9 |
+| mathlib_int_mul_comm | int_arithmetic | False | unsolved | 9 |
+| mathlib_int_add_zero | int_arithmetic | True | heuristic | 1 |
+| mathlib_int_zero_add | int_arithmetic | True | heuristic | 1 |
+| mathlib_int_neg_neg | int_arithmetic | True | heuristic | 1 |
+| mathlib_int_sub_self | int_arithmetic | True | heuristic | 1 |
+| mathlib_list_nil_append | list | True | heuristic | 1 |
+| mathlib_list_append_nil | list | True | heuristic | 1 |
+| mathlib_list_length_nil | list | True | heuristic | 1 |
+| mathlib_list_length_cons | list | True | heuristic | 1 |
+| mathlib_list_map_id | list | True | heuristic | 1 |
+| mathlib_list_reverse_reverse | list | True | heuristic | 1 |
+| mathlib_option_some_ne_none | option | True | heuristic | 1 |
+| mathlib_option_none_ne_some | option | True | heuristic | 1 |
+| mathlib_prod_fst_mk | product | True | heuristic | 1 |
+| mathlib_prod_snd_mk | product | True | heuristic | 1 |
