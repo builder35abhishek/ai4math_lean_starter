@@ -4,7 +4,7 @@
 - Solved: 45
 - Unsolved: 4
 - Solve rate: 91.8%
-- Average attempts per theorem: 1.67
+- Average attempts per theorem: 2.57
 
 ## First successful source
 
@@ -58,10 +58,10 @@
 | mathlib_nat_zero_ne_succ | nat_arithmetic | True | heuristic | 1 |
 | mathlib_nat_succ_injective | nat_arithmetic | True | heuristic | 1 |
 | mathlib_nat_pred_succ | nat_arithmetic | True | heuristic | 1 |
-| mathlib_nat_add_succ | nat_arithmetic | False | unsolved | 9 |
-| mathlib_nat_succ_add | nat_arithmetic | False | unsolved | 9 |
-| mathlib_int_add_comm | int_arithmetic | False | unsolved | 9 |
-| mathlib_int_mul_comm | int_arithmetic | False | unsolved | 9 |
+| mathlib_nat_add_succ | nat_arithmetic | False | unsolved | 20 |
+| mathlib_nat_succ_add | nat_arithmetic | False | unsolved | 20 |
+| mathlib_int_add_comm | int_arithmetic | False | unsolved | 20 |
+| mathlib_int_mul_comm | int_arithmetic | False | unsolved | 20 |
 | mathlib_int_add_zero | int_arithmetic | True | heuristic | 1 |
 | mathlib_int_zero_add | int_arithmetic | True | heuristic | 1 |
 | mathlib_int_neg_neg | int_arithmetic | True | heuristic | 1 |
