@@ -64,7 +64,8 @@ jobs:
           LEAN_CMD="lake env lean" python src/run_agent.py \
             --benchmark benchmarks/mathlib_theorems.jsonl \
             --out reports/mathlib_results.jsonl \
-            --max-candidates 5
+            --max-candidates 12 \
+            --max-repairs 8
 
       - name: Write proof agent metrics
         if: always() && hashFiles('reports/mathlib_results.jsonl') != ''
