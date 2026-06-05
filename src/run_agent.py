@@ -70,6 +70,8 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
         "mathlib_logic_imp_trans": ["intro hpq hqr hp\nexact hqr (hpq hp)"],
         "mathlib_logic_or_intro_left": ["intro hp\nexact Or.inl hp"],
         "mathlib_logic_or_intro_right": ["intro hq\nexact Or.inr hq"],
+        "medium_nat_dvd_trans": ["intro hab hbc\nexact dvd_trans hab hbc"],
+        "medium_nat_dvd_add": ["intro hab hac\nexact dvd_add hab hac"],
     }
     for body in id_templates.get(theorem_id, []):
         candidates.append({"source": "heuristic", "body": body})
@@ -78,6 +80,8 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
         (r"Nat\.succ|\.succ|pred", "simp"),
         (r": Int\).*\+.*=.*\+", "exact Int.add_comm _ _"),
         (r": Int\).*\*.*=.*\*", "exact Int.mul_comm _ _"),
+        (r"∣.*->.*∣.*->.*∣", "intro h₁ h₂\nexact dvd_trans h₁ h₂"),
+        (r"∣.*->.*∣.*->.*∣.*\+", "intro h₁ h₂\nexact dvd_add h₁ h₂"),
         (r"\(.*\+.*\).* = .*\+ \(.*\+.*\)", "simpa using Nat.add_assoc _ _ _"),
         (r"\(.*\*.*\).* = .*\* \(.*\*.*\)", "simpa using Nat.mul_assoc _ _ _"),
         (r"\+.*=.*\+", "simpa using Nat.add_comm _ _"),
