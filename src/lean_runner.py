@@ -1,12 +1,18 @@
 """Lean 4 runner.
 
-This module writes candidate Lean code to a temporary file and invokes the
-local `lean` binary. A proof is accepted if Lean exits with status 0.
+This module writes candidate Lean code to a temporary file and invokes Lean.
+By default it runs the local `lean` binary. For Mathlib/Lake projects, set:
+
+    LEAN_CMD="lake env lean"
+
+A proof is accepted if the command exits with status 0.
 """
 
 from __future__ import annotations
 
 import json
+import os
+import shlex
 import shutil
 import subprocess
 import tempfile
@@ -28,18 +34,29 @@ class LeanCheckResult:
         return json.dumps(asdict(self), ensure_ascii=False)
 
 
+def lean_command() -> list[str]:
+    cmd = os.environ.get("LEAN_CMD", "lean")
+    return shlex.split(cmd)
+
+
 def lean_available() -> bool:
-    return shutil.which("lean") is not None
+    cmd = lean_command()
+    if not cmd:
+        return False
+    return shutil.which(cmd[0]) is not None
 
 
 def check_lean_code(code: str, timeout_s: int = 20) -> LeanCheckResult:
-    lean_path = shutil.which("lean")
-    if lean_path is None:
+    cmd = lean_command()
+    if not cmd or shutil.which(cmd[0]) is None:
         return LeanCheckResult(
             ok=False,
             returncode=127,
             stdout="",
-            stderr="Lean executable not found. Install Lean 4 via elan and ensure `lean` is on PATH.",
+            stderr=(
+                "Lean executable not found. Install Lean 4 via elan and ensure `lean` is on PATH. "
+                "For Mathlib, set LEAN_CMD='lake env lean'."
+            ),
             code=code,
             lean_path=None,
         )
@@ -49,7 +66,7 @@ def check_lean_code(code: str, timeout_s: int = 20) -> LeanCheckResult:
         path.write_text(code, encoding="utf-8")
         try:
             proc = subprocess.run(
-                [lean_path, str(path)],
+                [*cmd, str(path)],
                 text=True,
                 capture_output=True,
                 timeout=timeout_s,
@@ -61,7 +78,7 @@ def check_lean_code(code: str, timeout_s: int = 20) -> LeanCheckResult:
                 stdout=exc.stdout or "",
                 stderr=(exc.stderr or "") + f"\nTimed out after {timeout_s}s.",
                 code=code,
-                lean_path=lean_path,
+                lean_path=" ".join(cmd),
             )
 
     return LeanCheckResult(
@@ -70,5 +87,5 @@ def check_lean_code(code: str, timeout_s: int = 20) -> LeanCheckResult:
         stdout=proc.stdout,
         stderr=proc.stderr,
         code=code,
-        lean_path=lean_path,
+        lean_path=" ".join(cmd),
     )
