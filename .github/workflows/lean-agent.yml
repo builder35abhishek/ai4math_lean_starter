@@ -141,21 +141,20 @@ jobs:
         run: |
           lake exe cache get || true
 
-      - name: Build Mathlib project smoke target
+      - name: Check Mathlib import smoke test
         run: |
-          mkdir -p Ai4Math
-          cat > Ai4Math/Smoke.lean <<'EOF'
+          cat > MathlibSmoke.lean <<'EOF'
           import Mathlib
 
           theorem mathlib_smoke_nat_add_comm (a b : Nat) : a + b = b + a := by
             simpa using Nat.add_comm a b
           EOF
-          lake build Ai4Math.Smoke
+          lake env lean MathlibSmoke.lean
 
       - name: Run Mathlib benchmark
         run: |
           mkdir -p reports
-          python src/run_agent.py \
+          LEAN_CMD="lake env lean" python src/run_agent.py \
             --benchmark benchmarks/mathlib_theorems.jsonl \
             --out reports/mathlib_results.jsonl \
             --max-candidates 5
