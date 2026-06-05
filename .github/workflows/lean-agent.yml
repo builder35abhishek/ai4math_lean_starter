@@ -58,6 +58,11 @@ jobs:
             --benchmark benchmarks/repair_theorems.jsonl \
             --out reports/repair_results.jsonl
 
+          python src/run_agent.py \
+            --benchmark benchmarks/actual_theorems.jsonl \
+            --out reports/actual_results.jsonl \
+            --max-candidates 5
+
       - name: Write run summary
         if: always()
         run: |
