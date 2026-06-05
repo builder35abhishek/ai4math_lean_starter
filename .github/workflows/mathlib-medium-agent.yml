@@ -5,12 +5,9 @@ name: Mathlib Medium Agent
   push:
     branches:
       - main
-    paths:
-      - "src/**"
-      - "benchmarks/mathlib_medium_theorems.jsonl"
-      - ".github/workflows/mathlib-medium-agent.yml"
-      - "lakefile.lean"
-      - "lean-toolchain"
+    paths-ignore:
+      - "reports/**"
+      - "README.md"
 
 permissions:
   contents: write
@@ -62,7 +59,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mathlib-medium-agent-results
-          path: reports/mathlib_medium_*.jsonl
+          path: |
+            reports/mathlib_medium_results.jsonl
+            reports/mathlib_medium_metrics.md
 
       - name: Commit medium reports
         if: always() && github.ref == 'refs/heads/main'
