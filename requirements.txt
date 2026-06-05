@@ -1,0 +1,6 @@
+# Pure Python standard-library only for the starter harness.
+# Optional future dependencies:
+# openai
+# anthropic
+# pandas
+# tqdm
