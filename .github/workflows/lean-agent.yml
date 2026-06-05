@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   lean-test:
     runs-on: ubuntu-latest
@@ -13,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -52,9 +58,40 @@ jobs:
             --benchmark benchmarks/repair_theorems.jsonl \
             --out reports/repair_results.jsonl
 
-      - name: Upload results
+      - name: Write run summary
+        if: always()
+        run: |
+          mkdir -p reports
+          {
+            echo "# Lean Proof Agent Run"
+            echo
+            echo "- Run ID: $GITHUB_RUN_ID"
+            echo "- Run number: $GITHUB_RUN_NUMBER"
+            echo "- Commit: $GITHUB_SHA"
+            echo "- Branch: $GITHUB_REF_NAME"
+            echo "- Timestamp UTC: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            echo
+            echo "## Generated reports"
+            find reports -maxdepth 1 -type f -print | sort | sed 's#^#- #'
+          } > reports/last_run_summary.md
+
+      - name: Upload results artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lean-results
           path: |
             reports/
+
+      - name: Commit reports to repository
+        if: always() && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          if git diff --cached --quiet; then
+            echo "No report changes to commit."
+          else
+            git commit -m "Update Lean benchmark reports [skip ci]"
+            git push
+          fi
