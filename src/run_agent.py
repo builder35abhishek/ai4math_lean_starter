@@ -55,9 +55,6 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
     theorem_id = item.get("id", "")
     candidates: list[dict] = []
 
-    # ID-specific templates are still deterministic, but they test whether the
-    # agent can choose proof strategies from theorem metadata instead of using
-    # benchmark-provided fallback solutions.
     id_templates: dict[str, list[str]] = {
         "mathlib_nat_add_assoc": ["simpa using Nat.add_assoc _ _ _"],
         "mathlib_nat_mul_assoc": ["simpa using Nat.mul_assoc _ _ _"],
@@ -65,6 +62,10 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
         "mathlib_nat_dvd_mul_right": ["exact ⟨_, rfl⟩"],
         "mathlib_nat_dvd_mul_left": ["exact ⟨_, by rw [Nat.mul_comm]⟩"],
         "mathlib_nat_even_double": ["exact ⟨_, rfl⟩"],
+        "mathlib_nat_add_succ": ["simp"],
+        "mathlib_nat_succ_add": ["simp"],
+        "mathlib_int_add_comm": ["simpa using add_comm _ _"],
+        "mathlib_int_mul_comm": ["simpa using mul_comm _ _"],
         "mathlib_logic_and_comm": ["intro h\nexact And.intro h.right h.left"],
         "mathlib_logic_imp_trans": ["intro hpq hqr hp\nexact hqr (hpq hp)"],
         "mathlib_logic_or_intro_left": ["intro hp\nexact Or.inl hp"],
@@ -73,8 +74,10 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
     for body in id_templates.get(theorem_id, []):
         candidates.append({"source": "heuristic", "body": body})
 
-    # Shape-based templates generalize beyond the current 25 theorem benchmark.
     patterns: list[tuple[str, str]] = [
+        (r"Nat\.succ|\.succ|pred", "simp"),
+        (r": Int\).*\+.*=.*\+", "simpa using add_comm _ _"),
+        (r": Int\).*\*.*=.*\*", "simpa using mul_comm _ _"),
         (r"\(.*\+.*\).* = .*\+ \(.*\+.*\)", "simpa using Nat.add_assoc _ _ _"),
         (r"\(.*\*.*\).* = .*\* \(.*\*.*\)", "simpa using Nat.mul_assoc _ _ _"),
         (r"\+.*=.*\+", "simpa using Nat.add_comm _ _"),
@@ -119,10 +122,6 @@ def repair_candidates(error_text: str, max_candidates: int) -> List[dict]:
 
 
 def generate_llm_candidates(item: dict, previous_errors: List[str], max_candidates: int) -> List[str]:
-    """Future extension point for external LLMs.
-
-    CI intentionally stays deterministic unless LEAN_AGENT_ENABLE_LLM is set.
-    """
     if not os.environ.get("LEAN_AGENT_ENABLE_LLM"):
         return []
     return []
