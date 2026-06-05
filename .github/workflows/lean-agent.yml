@@ -66,6 +66,13 @@ jobs:
             --out reports/mathlib_results.jsonl \
             --max-candidates 5
 
+      - name: Write proof agent metrics
+        if: always() && hashFiles('reports/mathlib_results.jsonl') != ''
+        run: |
+          python src/report_metrics.py \
+            --results reports/mathlib_results.jsonl \
+            --out reports/mathlib_metrics.md
+
       - name: Write Mathlib run summary
         if: always()
         run: |
