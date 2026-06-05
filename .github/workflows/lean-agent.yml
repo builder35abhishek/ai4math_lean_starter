@@ -1,50 +1,50 @@
 name: Lean Proof Agent
 
 on:
-workflow_dispatch:
-push:
-branches:
-- main
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-lean-test:
-runs-on: ubuntu-latest
+  lean-test:
+    runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  - name: Install Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: "3.11"
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-  - name: Install Lean
-    run: |
-      curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
-      echo "$HOME/.elan/bin" >> $GITHUB_PATH
+      - name: Install Lean
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
 
-  - name: Verify Lean
-    run: |
-      lean --version
-      lake --version
+      - name: Verify Lean
+        run: |
+          lean --version
+          lake --version
 
-  - name: Install Python deps
-    run: |
-      python -m pip install --upgrade pip
-      if [ -f requirements.txt ]; then
-        pip install -r requirements.txt
-      fi
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
 
-  - name: Run benchmark
-    run: |
-      python src/run_toy.py \
-        --benchmark benchmarks/toy_theorems.jsonl \
-        --out reports/toy_results.jsonl
+      - name: Run benchmark
+        run: |
+          python src/run_toy.py \
+            --benchmark benchmarks/toy_theorems.jsonl \
+            --out reports/toy_results.jsonl
 
-  - name: Upload results
-    uses: actions/upload-artifact@v4
-    with:
-      name: lean-results
-      path: |
-        reports/
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-results
+          path: |
+            reports/
