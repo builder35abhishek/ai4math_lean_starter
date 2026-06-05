@@ -1,24 +1,23 @@
 # Mathlib Proof Agent Metrics
 
 - Total theorems: 49
-- Solved: 45
-- Unsolved: 4
-- Solve rate: 91.8%
-- Average attempts per theorem: 2.57
+- Solved: 49
+- Unsolved: 0
+- Solve rate: 100.0%
+- Average attempts per theorem: 1.02
 
 ## First successful source
 
-- heuristic: 45
-- unsolved: 4
+- heuristic: 49
 
 ## Domain breakdown
 
 - algebra: heuristic=12
 - inequality: heuristic=5
-- int_arithmetic: heuristic=4, unsolved=2
+- int_arithmetic: heuristic=6
 - list: heuristic=6
 - logic: heuristic=5
-- nat_arithmetic: heuristic=4, unsolved=2
+- nat_arithmetic: heuristic=6
 - number_theory: heuristic=5
 - option: heuristic=2
 - product: heuristic=2
@@ -58,10 +57,10 @@
 | mathlib_nat_zero_ne_succ | nat_arithmetic | True | heuristic | 1 |
 | mathlib_nat_succ_injective | nat_arithmetic | True | heuristic | 1 |
 | mathlib_nat_pred_succ | nat_arithmetic | True | heuristic | 1 |
-| mathlib_nat_add_succ | nat_arithmetic | False | unsolved | 20 |
-| mathlib_nat_succ_add | nat_arithmetic | False | unsolved | 20 |
-| mathlib_int_add_comm | int_arithmetic | False | unsolved | 20 |
-| mathlib_int_mul_comm | int_arithmetic | False | unsolved | 20 |
+| mathlib_nat_add_succ | nat_arithmetic | True | heuristic | 1 |
+| mathlib_nat_succ_add | nat_arithmetic | True | heuristic | 1 |
+| mathlib_int_add_comm | int_arithmetic | True | heuristic | 1 |
+| mathlib_int_mul_comm | int_arithmetic | True | heuristic | 1 |
 | mathlib_int_add_zero | int_arithmetic | True | heuristic | 1 |
 | mathlib_int_zero_add | int_arithmetic | True | heuristic | 1 |
 | mathlib_int_neg_neg | int_arithmetic | True | heuristic | 1 |
