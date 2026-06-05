@@ -39,8 +39,8 @@ jobs:
       - name: Run benchmark
         run: |
           python src/run_toy.py \
-            --benchmark benchmarks/toy_theorems.jsonl \
-            --out reports/toy_results.jsonl
+            --benchmark benchmarks/beginner_theorems.jsonl \
+            --out reports/beginner_results.jsonl
 
       - name: Upload results
         uses: actions/upload-artifact@v4
