@@ -53,11 +53,11 @@ jobs:
       - name: Check Mathlib import smoke test
         run: |
           cat > MathlibSmoke.lean <<'EOF'
-          import Mathlib
+import Mathlib
 
-          theorem mathlib_smoke_nat_add_comm (a b : Nat) : a + b = b + a := by
-            simpa using Nat.add_comm a b
-          EOF
+theorem mathlib_smoke_nat_add_comm (a b : Nat) : a + b = b + a := by
+  simpa using Nat.add_comm a b
+EOF
           lake env lean MathlibSmoke.lean
 
       - name: Run actual Mathlib benchmark
