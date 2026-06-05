@@ -1,18 +1,19 @@
 # Mathlib Proof Agent Metrics
 
-- Total theorems: 49
-- Solved: 49
+- Total theorems: 50
+- Solved: 50
 - Unsolved: 0
 - Solve rate: 100.0%
 - Average attempts per theorem: 1.02
 
 ## First successful source
 
-- heuristic: 49
+- heuristic: 50
 
 ## Domain breakdown
 
 - algebra: heuristic=12
+- bool: heuristic=1
 - inequality: heuristic=5
 - int_arithmetic: heuristic=6
 - list: heuristic=6
@@ -75,3 +76,4 @@
 | mathlib_option_none_ne_some | option | True | heuristic | 1 |
 | mathlib_prod_fst_mk | product | True | heuristic | 1 |
 | mathlib_prod_snd_mk | product | True | heuristic | 1 |
+| mathlib_bool_not_not | bool | True | heuristic | 1 |
