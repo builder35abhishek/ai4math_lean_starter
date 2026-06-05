@@ -22,7 +22,7 @@ jobs:
       - name: Install Lean
         run: |
           curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
-          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
       - name: Verify Lean
         run: |
@@ -36,11 +36,21 @@ jobs:
             pip install -r requirements.txt
           fi
 
-      - name: Run benchmark
+      - name: Run benchmarks
         run: |
+          mkdir -p reports
+
+          python src/run_toy.py \
+            --benchmark benchmarks/toy_theorems.jsonl \
+            --out reports/toy_results.jsonl
+
           python src/run_toy.py \
             --benchmark benchmarks/beginner_theorems.jsonl \
             --out reports/beginner_results.jsonl
+
+          python src/run_toy.py \
+            --benchmark benchmarks/repair_theorems.jsonl \
+            --out reports/repair_results.jsonl
 
       - name: Upload results
         uses: actions/upload-artifact@v4
