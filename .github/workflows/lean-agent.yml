@@ -1,7 +1,7 @@
 name: Mathlib Proof Agent
 
-on:
-  workflow_dispatch:
+"on":
+  workflow_dispatch: {}
   push:
     branches:
       - main
@@ -43,21 +43,19 @@ jobs:
           fi
 
       - name: Fetch Mathlib dependencies
-        run: |
-          lake update
+        run: lake update
 
       - name: Download Mathlib cache
-        run: |
-          lake exe cache get || true
+        run: lake exe cache get || true
 
       - name: Check Mathlib import smoke test
         run: |
-          cat > MathlibSmoke.lean <<'EOF'
-import Mathlib
-
-theorem mathlib_smoke_nat_add_comm (a b : Nat) : a + b = b + a := by
-  simpa using Nat.add_comm a b
-EOF
+          printf '%s\n' \
+            'import Mathlib' \
+            '' \
+            'theorem mathlib_smoke_nat_add_comm (a b : Nat) : a + b = b + a := by' \
+            '  simpa using Nat.add_comm a b' \
+            > MathlibSmoke.lean
           lake env lean MathlibSmoke.lean
 
       - name: Run actual Mathlib benchmark
@@ -90,8 +88,7 @@ EOF
         uses: actions/upload-artifact@v4
         with:
           name: mathlib-proof-agent-results
-          path: |
-            reports/
+          path: reports/
 
       - name: Commit Mathlib reports to repository
         if: always() && github.ref == 'refs/heads/main'
