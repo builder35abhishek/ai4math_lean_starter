@@ -27,7 +27,14 @@ def build_code(header: str, statement: str, proof_body: str) -> str:
     if header.strip():
         pieces.append(header.rstrip())
     pieces.append(statement.rstrip())
-    pieces.append(proof_body.rstrip())
+
+    body = proof_body.rstrip()
+    indented_body = "\n".join(
+        ("  " + line if line.strip() else line)
+        for line in body.splitlines()
+    )
+    pieces.append(indented_body)
+
     return "\n".join(pieces) + "\n"
 
 
