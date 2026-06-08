@@ -20,15 +20,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      - name: Restore Lean and Lake cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.elan
+            .lake
+            lake-manifest.json
+          key: lean-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.lean') }}
+          restore-keys: |
+            lean-${{ runner.os }}-
+
       - name: Install Lean
         run: |
-          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+          if ! command -v lean >/dev/null 2>&1; then
+            curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+          fi
           export PATH="$HOME/.elan/bin:$PATH"
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           lean --version
@@ -49,20 +62,29 @@ jobs:
             --max-repairs 8
 
       - name: Write medium metrics
-        if: success() && hashFiles('reports/mathlib_medium_results.jsonl') != ''
+        if: success()
         run: |
           python src/report_metrics.py \
             --results reports/mathlib_medium_results.jsonl \
             --out reports/mathlib_medium_metrics.md
 
-      - name: Upload medium reports
+      - name: Upload benchmark results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mathlib-medium-agent-results
-          path: |
-            reports/mathlib_medium_results.jsonl
-            reports/mathlib_medium_metrics.md
+          path: reports/mathlib_medium_results.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload passing metrics
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mathlib-medium-agent-metrics
+          path: reports/mathlib_medium_metrics.md
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Commit passing medium reports
         if: success() && github.ref == 'refs/heads/main'
