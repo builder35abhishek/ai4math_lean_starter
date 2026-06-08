@@ -49,7 +49,7 @@ jobs:
             --max-repairs 8
 
       - name: Write medium metrics
-        if: always() && hashFiles('reports/mathlib_medium_results.jsonl') != ''
+        if: success() && hashFiles('reports/mathlib_medium_results.jsonl') != ''
         run: |
           python src/report_metrics.py \
             --results reports/mathlib_medium_results.jsonl \
@@ -64,8 +64,8 @@ jobs:
             reports/mathlib_medium_results.jsonl
             reports/mathlib_medium_metrics.md
 
-      - name: Commit medium reports
-        if: always() && github.ref == 'refs/heads/main'
+      - name: Commit passing medium reports
+        if: success() && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -73,6 +73,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No medium report changes to commit."
           else
-            git commit -m "Update medium proof agent reports [skip ci]"
+            git commit -m "Update passing medium proof agent reports [skip ci]"
             git push
           fi
