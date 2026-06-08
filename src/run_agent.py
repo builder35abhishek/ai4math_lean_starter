@@ -50,6 +50,21 @@ def theorem_signature(statement: str) -> str:
     return text.removesuffix(":= by").strip()
 
 
+DVD_TRANS_WITNESS = """intro hab hbc
+match hab with
+| ⟨k, hk⟩ =>
+  match hbc with
+  | ⟨l, hl⟩ =>
+    exact ⟨k * l, by rw [hl, hk, Nat.mul_assoc]⟩"""
+
+DVD_ADD_WITNESS = """intro hab hac
+match hab with
+| ⟨k, hk⟩ =>
+  match hac with
+  | ⟨l, hl⟩ =>
+    exact ⟨k + l, by rw [hk, hl, Nat.mul_add]⟩"""
+
+
 def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
     stmt = theorem_signature(item["statement"])
     theorem_id = item.get("id", "")
@@ -70,8 +85,8 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
         "mathlib_logic_imp_trans": ["intro hpq hqr hp\nexact hqr (hpq hp)"],
         "mathlib_logic_or_intro_left": ["intro hp\nexact Or.inl hp"],
         "mathlib_logic_or_intro_right": ["intro hq\nexact Or.inr hq"],
-        "medium_nat_dvd_trans": ["intro hab hbc\nexact dvd_trans hab hbc"],
-        "medium_nat_dvd_add": ["intro hab hac\nexact dvd_add hab hac"],
+        "medium_nat_dvd_trans": [DVD_TRANS_WITNESS],
+        "medium_nat_dvd_add": [DVD_ADD_WITNESS],
     }
     for body in id_templates.get(theorem_id, []):
         candidates.append({"source": "heuristic", "body": body})
@@ -80,8 +95,8 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
         (r"Nat\.succ|\.succ|pred", "simp"),
         (r": Int\).*\+.*=.*\+", "exact Int.add_comm _ _"),
         (r": Int\).*\*.*=.*\*", "exact Int.mul_comm _ _"),
-        (r"∣.*->.*∣.*->.*∣", "intro h₁ h₂\nexact dvd_trans h₁ h₂"),
-        (r"∣.*->.*∣.*->.*∣.*\+", "intro h₁ h₂\nexact dvd_add h₁ h₂"),
+        (r"∣.*->.*∣.*->.*∣.*\+", DVD_ADD_WITNESS),
+        (r"∣.*->.*∣.*->.*∣", DVD_TRANS_WITNESS),
         (r"\(.*\+.*\).* = .*\+ \(.*\+.*\)", "simpa using Nat.add_assoc _ _ _"),
         (r"\(.*\*.*\).* = .*\* \(.*\*.*\)", "simpa using Nat.mul_assoc _ _ _"),
         (r"\+.*=.*\+", "simpa using Nat.add_comm _ _"),
@@ -109,8 +124,10 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
 
 def repair_candidates(error_text: str, max_candidates: int) -> List[dict]:
     repairs: list[dict] = []
-    if "Unknown identifier `dvd_rfl`" in error_text or "Unknown identifier `dvd_mul" in error_text or "Unknown identifier `dvd_zero`" in error_text:
+    if "Unknown identifier `dvd" in error_text:
         repairs.extend([
+            {"source": "repair", "body": DVD_ADD_WITNESS},
+            {"source": "repair", "body": DVD_TRANS_WITNESS},
             {"source": "repair", "body": "exact ⟨1, by simp⟩"},
             {"source": "repair", "body": "exact ⟨0, by simp⟩"},
             {"source": "repair", "body": "exact ⟨_, rfl⟩"},
