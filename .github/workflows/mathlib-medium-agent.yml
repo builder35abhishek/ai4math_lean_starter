@@ -43,6 +43,7 @@ jobs:
           path: |
             .lake/packages
             .lake/build
+            ~/.cache/mathlib
             lake-manifest.json
           key: lake-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.lean') }}
           restore-keys: |
