@@ -25,21 +25,32 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: |
+            requirements.txt
 
-      - name: Restore Lean and Lake cache
+      - name: Restore Elan toolchain cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.elan
+          key: elan-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}
+          restore-keys: |
+            elan-${{ runner.os }}-
+
+      - name: Restore Lake and Mathlib cache
         uses: actions/cache@v4
         with:
           path: |
-            ~/.elan
-            .lake
+            .lake/packages
+            .lake/build
             lake-manifest.json
-          key: lean-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.lean') }}
+          key: lake-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.lean') }}
           restore-keys: |
-            lean-${{ runner.os }}-
+            lake-${{ runner.os }}-
 
       - name: Install Lean
         run: |
-          if ! command -v lean >/dev/null 2>&1; then
+          if [ ! -x "$HOME/.elan/bin/lean" ]; then
             curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
           fi
           export PATH="$HOME/.elan/bin:$PATH"
@@ -49,8 +60,16 @@ jobs:
 
       - name: Prepare Mathlib
         run: |
-          lake update
-          lake exe cache get || true
+          if [ ! -f lake-manifest.json ]; then
+            lake update
+          else
+            echo "Using cached lake-manifest.json"
+          fi
+          if [ ! -d .lake/packages/mathlib/.lake/build/lib/lean/Mathlib ]; then
+            lake exe cache get || true
+          else
+            echo "Using cached Mathlib build"
+          fi
 
       - name: Run medium benchmark
         run: |
