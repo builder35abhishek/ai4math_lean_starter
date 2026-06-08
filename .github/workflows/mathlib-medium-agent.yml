@@ -15,41 +15,15 @@ permissions:
 
 jobs:
   medium-agent:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          clean: false
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-          cache-dependency-path: |
-            requirements.txt
-
-      - name: Restore Elan toolchain cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.elan
-          key: elan-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}
-          restore-keys: |
-            elan-${{ runner.os }}-
-
-      - name: Restore Lake and Mathlib cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .lake/packages
-            .lake/build
-            ~/.cache/mathlib
-            lake-manifest.json
-          key: lake-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.lean') }}
-          restore-keys: |
-            lake-${{ runner.os }}-
-
-      - name: Install Lean
+      - name: Ensure Lean is available
         run: |
           if [ ! -x "$HOME/.elan/bin/lean" ]; then
             curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
@@ -59,23 +33,23 @@ jobs:
           lean --version
           lake --version
 
-      - name: Prepare Mathlib
+      - name: Prepare Mathlib only if missing
         run: |
           if [ ! -f lake-manifest.json ]; then
             lake update
           else
-            echo "Using cached lake-manifest.json"
+            echo "lake-manifest.json present; skipping lake update"
           fi
           if [ ! -d .lake/packages/mathlib/.lake/build/lib/lean/Mathlib ]; then
             lake exe cache get || true
           else
-            echo "Using cached Mathlib build"
+            echo "Mathlib build cache present; skipping lake exe cache get"
           fi
 
       - name: Run medium benchmark
         run: |
           mkdir -p reports
-          LEAN_CMD="lake env lean" python src/run_agent.py \
+          LEAN_CMD="lake env lean" python3 src/run_agent.py \
             --benchmark benchmarks/mathlib_medium_theorems.jsonl \
             --out reports/mathlib_medium_results.jsonl \
             --max-candidates 16 \
@@ -84,7 +58,7 @@ jobs:
       - name: Write medium metrics
         if: success()
         run: |
-          python src/report_metrics.py \
+          python3 src/report_metrics.py \
             --results reports/mathlib_medium_results.jsonl \
             --out reports/mathlib_medium_metrics.md
 
