@@ -64,6 +64,20 @@ match hab with
   | ⟨l, hl⟩ =>
     exact ⟨k + l, by rw [hk, hl, Nat.mul_add]⟩"""
 
+LOGIC_AND_COMM = """intro h
+exact And.intro h.right h.left"""
+
+LOGIC_AND_ASSOC = """intro h
+exact And.intro h.left.left (And.intro h.left.right h.right)"""
+
+LOGIC_OR_COMM = """intro h
+cases h with
+| inl hp => exact Or.inr hp
+| inr hq => exact Or.inl hq"""
+
+LOGIC_IMP_TRANS = """intro hpq hqr hp
+exact hqr (hpq hp)"""
+
 
 def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
     stmt = theorem_signature(item["statement"])
@@ -81,8 +95,8 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
         "mathlib_nat_succ_add": ["rw [Nat.succ_add]"],
         "mathlib_int_add_comm": ["exact Int.add_comm _ _"],
         "mathlib_int_mul_comm": ["exact Int.mul_comm _ _"],
-        "mathlib_logic_and_comm": ["intro h\nexact And.intro h.right h.left"],
-        "mathlib_logic_imp_trans": ["intro hpq hqr hp\nexact hqr (hpq hp)"],
+        "mathlib_logic_and_comm": [LOGIC_AND_COMM],
+        "mathlib_logic_imp_trans": [LOGIC_IMP_TRANS],
         "mathlib_logic_or_intro_left": ["intro hp\nexact Or.inl hp"],
         "mathlib_logic_or_intro_right": ["intro hq\nexact Or.inr hq"],
         "medium_nat_dvd_trans": [DVD_TRANS_WITNESS],
@@ -93,9 +107,14 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
         "medium_int_mul_assoc_v2": ["simpa using mul_assoc _ _ _"],
         "medium_nat_mul_add_v3": ["exact Nat.mul_add _ _ _"],
         "medium_nat_add_mul_v3": ["exact Nat.add_mul _ _ _"],
-        "medium_logic_and_assoc_v2": ["intro h\nexact And.intro h.left.left (And.intro h.left.right h.right)"],
-        "medium_logic_or_comm_v2": ["intro h\ncases h with\n| inl hp => exact Or.inr hp\n| inr hq => exact Or.inl hq"],
+        "medium_logic_and_assoc_v2": [LOGIC_AND_ASSOC],
+        "medium_logic_or_comm_v2": [LOGIC_OR_COMM],
         "medium_logic_and_left_v3": ["intro h\nexact h.left"],
+        "v4_logic_and_comm": [LOGIC_AND_COMM],
+        "v4_logic_and_assoc": [LOGIC_AND_ASSOC],
+        "v4_logic_or_intro_left": ["intro hp\nexact Or.inl hp"],
+        "v4_logic_or_intro_right": ["intro hq\nexact Or.inr hq"],
+        "v4_logic_imp_trans": [LOGIC_IMP_TRANS],
     }
     for body in id_templates.get(theorem_id, []):
         candidates.append({"source": "heuristic", "body": body})
@@ -119,9 +138,11 @@ def generated_candidates(item: dict, max_candidates: int) -> List[dict]:
         (r"Nat\.succ.*≤.*->.*<", "intro h\nexact Nat.lt_of_succ_le h"),
         (r"≤.*->.*≤.*->.*≤", "intro h₁ h₂\nexact le_trans h₁ h₂"),
         (r"∣.*\*", "exact ⟨_, rfl⟩"),
-        (r"∧.*->.*∧", "intro h\nconstructor\n · exact h.left.left\n · constructor\n   · exact h.left.right\n   · exact h.right"),
+        (r"\(.*∧.*\) ∧ .*->.*∧.*\(.*∧.*\)", LOGIC_AND_ASSOC),
+        (r"∧.*->.*∧", LOGIC_AND_COMM),
         (r"∧.*->", "intro h\nexact h.left"),
-        (r"∨.*->.*∨", "intro h\ncases h with\n| inl hp => exact Or.inr hp\n| inr hq => exact Or.inl hq"),
+        (r"∨.*->.*∨", LOGIC_OR_COMM),
+        (r"->.*->.*->", LOGIC_IMP_TRANS),
         (r"∧", "aesop"),
         (r"∨", "aesop"),
         (r"∃", "aesop"),
