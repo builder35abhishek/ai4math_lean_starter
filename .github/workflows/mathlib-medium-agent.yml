@@ -86,7 +86,10 @@ jobs:
         run: |
           python src/report_metrics.py \
             --results reports/mathlib_medium_results.jsonl \
-            --out reports/mathlib_medium_metrics.md
+            --out reports/mathlib_medium_metrics.md \
+            --min-total 50 \
+            --require-all-solved \
+            --forbid-source fallback
 
       - name: Run v4 65-theorem benchmark
         if: success()
@@ -102,7 +105,10 @@ jobs:
         run: |
           python src/report_metrics.py \
             --results reports/mathlib_medium_v4_results.jsonl \
-            --out reports/mathlib_medium_v4_metrics.md
+            --out reports/mathlib_medium_v4_metrics.md \
+            --min-total 65 \
+            --require-all-solved \
+            --forbid-source fallback
 
       - name: Upload benchmark results
         if: always()
