@@ -110,38 +110,24 @@ jobs:
             --require-all-solved \
             --forbid-source fallback
 
-      - name: Upload benchmark results
+      - name: Upload medium artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mathlib-medium-agent-results
-          path: reports/mathlib_medium_results.jsonl
+          name: mathlib-medium-agent
+          path: |
+            reports/mathlib_medium_results.jsonl
+            reports/mathlib_medium_metrics.md
           if-no-files-found: ignore
           retention-days: 7
 
-      - name: Upload passing metrics
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: mathlib-medium-agent-metrics
-          path: reports/mathlib_medium_metrics.md
-          if-no-files-found: ignore
-          retention-days: 7
-
-      - name: Upload v4 benchmark results
+      - name: Upload v4 artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mathlib-medium-v4-agent-results
-          path: reports/mathlib_medium_v4_results.jsonl
-          if-no-files-found: ignore
-          retention-days: 7
-
-      - name: Upload v4 passing metrics
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: mathlib-medium-v4-agent-metrics
-          path: reports/mathlib_medium_v4_metrics.md
+          name: mathlib-medium-v4-agent
+          path: |
+            reports/mathlib_medium_v4_results.jsonl
+            reports/mathlib_medium_v4_metrics.md
           if-no-files-found: ignore
           retention-days: 7
