@@ -88,7 +88,7 @@ jobs:
             --results reports/mathlib_medium_results.jsonl \
             --out reports/mathlib_medium_metrics.md
 
-      - name: Run v4 100-track benchmark
+      - name: Run v4 65-theorem benchmark
         if: success()
         run: |
           LEAN_CMD="lake env lean" python src/run_agent.py \
@@ -97,7 +97,7 @@ jobs:
             --max-candidates 16 \
             --max-repairs 8
 
-      - name: Write v4 100-track metrics
+      - name: Write v4 65-theorem metrics
         if: success()
         run: |
           python src/report_metrics.py \
