@@ -10,7 +10,7 @@ name: Mathlib Medium Agent
       - "README.md"
 
 permissions:
-  contents: write
+  contents: read
   actions: read
 
 env:
@@ -145,16 +145,3 @@ jobs:
           path: reports/mathlib_medium_v4_metrics.md
           if-no-files-found: ignore
           retention-days: 7
-
-      - name: Commit passing medium metrics
-        if: success() && github.ref == 'refs/heads/main'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports/mathlib_medium_metrics.md reports/mathlib_medium_v4_metrics.md || true
-          if git diff --cached --quiet; then
-            echo "No medium metric changes to commit."
-          else
-            git commit -m "Update passing medium proof agent metrics [skip ci]"
-            git push
-          fi
