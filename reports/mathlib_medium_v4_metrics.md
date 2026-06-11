@@ -4,12 +4,11 @@
 - Solved: 65
 - Unsolved: 0
 - Solve rate: 100.0%
-- Average attempts per theorem: 1.32
+- Average attempts per theorem: 1.11
 
 ## First successful source
 
-- heuristic: 60
-- fallback: 5
+- heuristic: 65
 
 ## Domain breakdown
 
@@ -19,7 +18,7 @@
 - int_arithmetic: heuristic=6
 - list: heuristic=4
 - list_induction: heuristic=8
-- logic: fallback=5, heuristic=4
+- logic: heuristic=9
 - number_theory: heuristic=2
 - option: heuristic=4
 - order: heuristic=7
@@ -83,12 +82,12 @@
 | v4_logic_imp_refl | logic | True | heuristic | 1 |
 | v4_logic_and_left | logic | True | heuristic | 1 |
 | v4_logic_and_right | logic | True | heuristic | 3 |
-| v4_logic_and_comm | logic | True | fallback | 5 |
-| v4_logic_and_assoc | logic | True | fallback | 5 |
+| v4_logic_and_comm | logic | True | heuristic | 1 |
+| v4_logic_and_assoc | logic | True | heuristic | 1 |
 | v4_logic_or_comm | logic | True | heuristic | 1 |
-| v4_logic_or_intro_left | logic | True | fallback | 3 |
-| v4_logic_or_intro_right | logic | True | fallback | 3 |
-| v4_logic_imp_trans | logic | True | fallback | 3 |
+| v4_logic_or_intro_left | logic | True | heuristic | 1 |
+| v4_logic_or_intro_right | logic | True | heuristic | 1 |
+| v4_logic_imp_trans | logic | True | heuristic | 1 |
 | v4_nat_dvd_trans | number_theory | True | heuristic | 1 |
 | v4_nat_dvd_add | number_theory | True | heuristic | 1 |
 | v4_exists_nat_zero | exists | True | heuristic | 2 |
