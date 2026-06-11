@@ -33,6 +33,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--results", required=True, type=Path)
     parser.add_argument("--out", required=True, type=Path)
+    parser.add_argument("--min-total", type=int, default=0)
+    parser.add_argument("--require-all-solved", action="store_true")
+    parser.add_argument("--forbid-source", action="append", default=[])
     args = parser.parse_args()
 
     rows = load_jsonl(args.results)
@@ -84,6 +87,19 @@ def main() -> None:
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"Wrote metrics to {args.out}")
+
+    failures: list[str] = []
+    if total < args.min_total:
+        failures.append(f"expected at least {args.min_total} theorem rows, got {total}")
+    if args.require_all_solved and solved != total:
+        failures.append(f"expected all theorems solved, got {solved}/{total}")
+    for source in args.forbid_source:
+        count = source_counts.get(source, 0)
+        if count:
+            failures.append(f"forbidden first-success source {source!r} appeared {count} time(s)")
+
+    if failures:
+        raise SystemExit("Metric gate failed: " + "; ".join(failures))
 
 
 if __name__ == "__main__":
