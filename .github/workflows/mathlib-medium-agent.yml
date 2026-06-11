@@ -88,6 +88,22 @@ jobs:
             --results reports/mathlib_medium_results.jsonl \
             --out reports/mathlib_medium_metrics.md
 
+      - name: Run v4 100-track benchmark
+        if: success()
+        run: |
+          LEAN_CMD="lake env lean" python src/run_agent.py \
+            --benchmark benchmarks/mathlib_medium_v4_100_theorems.jsonl \
+            --out reports/mathlib_medium_v4_results.jsonl \
+            --max-candidates 16 \
+            --max-repairs 8
+
+      - name: Write v4 100-track metrics
+        if: success()
+        run: |
+          python src/report_metrics.py \
+            --results reports/mathlib_medium_v4_results.jsonl \
+            --out reports/mathlib_medium_v4_metrics.md
+
       - name: Upload benchmark results
         if: always()
         uses: actions/upload-artifact@v4
@@ -106,12 +122,30 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+      - name: Upload v4 benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mathlib-medium-v4-agent-results
+          path: reports/mathlib_medium_v4_results.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload v4 passing metrics
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mathlib-medium-v4-agent-metrics
+          path: reports/mathlib_medium_v4_metrics.md
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Commit passing medium reports
         if: success() && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports/mathlib_medium_results.jsonl reports/mathlib_medium_metrics.md || true
+          git add reports/mathlib_medium_results.jsonl reports/mathlib_medium_metrics.md reports/mathlib_medium_v4_results.jsonl reports/mathlib_medium_v4_metrics.md || true
           if git diff --cached --quiet; then
             echo "No medium report changes to commit."
           else
