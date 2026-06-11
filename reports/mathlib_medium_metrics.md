@@ -1,29 +1,29 @@
 # Mathlib Proof Agent Metrics
 
-- Total theorems: 30
-- Solved: 30
+- Total theorems: 50
+- Solved: 50
 - Unsolved: 0
 - Solve rate: 100.0%
-- Average attempts per theorem: 1.63
+- Average attempts per theorem: 1.58
 
 ## First successful source
 
-- heuristic: 24
-- fallback: 6
+- heuristic: 41
+- fallback: 9
 
 ## Domain breakdown
 
-- algebra: heuristic=3
+- algebra: fallback=2, heuristic=8
 - bool: heuristic=3
 - induction: heuristic=4
 - int_arithmetic: fallback=2, heuristic=2
-- list: heuristic=1
-- list_induction: heuristic=6
-- logic: fallback=2
+- list: heuristic=2
+- list_induction: heuristic=9
+- logic: fallback=3, heuristic=1
 - number_theory: heuristic=2
-- option: heuristic=2
-- order: fallback=2
-- product: heuristic=1
+- option: heuristic=4
+- order: fallback=2, heuristic=3
+- product: heuristic=3
 
 ## Theorem details
 
@@ -59,3 +59,23 @@
 | medium_bool_or_false_v2 | bool | True | heuristic | 1 |
 | medium_logic_and_assoc_v2 | logic | True | fallback | 3 |
 | medium_logic_or_comm_v2 | logic | True | fallback | 3 |
+| medium_nat_add_comm_v3 | algebra | True | heuristic | 1 |
+| medium_nat_mul_comm_v3 | algebra | True | heuristic | 1 |
+| medium_nat_mul_one_v3 | algebra | True | heuristic | 1 |
+| medium_nat_one_mul_v3 | algebra | True | heuristic | 1 |
+| medium_nat_zero_mul_v3 | algebra | True | heuristic | 1 |
+| medium_nat_mul_add_v3 | algebra | True | fallback | 5 |
+| medium_nat_add_mul_v3 | algebra | True | fallback | 5 |
+| medium_nat_le_refl_v3 | order | True | heuristic | 1 |
+| medium_nat_lt_succ_self_v3 | order | True | heuristic | 1 |
+| medium_nat_succ_le_succ_v3 | order | True | heuristic | 1 |
+| medium_list_cons_append_v3 | list_induction | True | heuristic | 1 |
+| medium_list_length_cons_v3 | list | True | heuristic | 1 |
+| medium_list_map_id_v3 | list_induction | True | heuristic | 1 |
+| medium_list_append_assoc_v3 | list_induction | True | heuristic | 1 |
+| medium_option_bind_some_v3 | option | True | heuristic | 1 |
+| medium_option_bind_none_v3 | option | True | heuristic | 1 |
+| medium_prod_fst_mk_v3 | product | True | heuristic | 1 |
+| medium_prod_snd_mk_v3 | product | True | heuristic | 1 |
+| medium_logic_imp_refl_v3 | logic | True | heuristic | 1 |
+| medium_logic_and_left_v3 | logic | True | fallback | 3 |
